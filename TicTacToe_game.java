@@ -1,5 +1,6 @@
 package TicTacToe;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class TicTacToe {
@@ -41,11 +42,37 @@ public class TicTacToe {
         System.out.println(" "+ board[7] + " | " + board[8] + " | " + board[9]);
         System.out.println(" ");
     }
+ 		public static void playerTurn() {
+        Scanner scan = new Scanner(System.in);
+        System.out.println("Please enter the position where you want to make your move (1-9): ");
+
+        Integer[] valid = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int pos = scan.nextInt();
+        if (Arrays.asList(valid).contains(pos) && checkEmpty(pos)) {
+            board[pos] = player;
+            showBoard();
+        }else {
+            System.out.println("Invalid Choice");
+            playerTurn();
+        }
+
+    }
+
+    public static boolean checkEmpty(int pos) {
+        if(board[pos] == ' ') {
+            return true;
+        }else {
+            System.out.println("The Position you entered is already filled. Please select the position that is empty.");
+            playerTurn();
+        }
+        return true;
+    }
 
        public static void main(String[] args){
            createboard();
            playerSelect();
            showBoard();
+			  playerTurn();
        }
    }
 
