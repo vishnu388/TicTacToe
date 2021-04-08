@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 public class TicTacToe {
-
 	 // UC-2
     static char[] board = new char[10];
     public static char player;
@@ -54,40 +53,59 @@ public class TicTacToe {
 
         Integer[] valid = {1, 2, 3, 4, 5, 6, 7, 8, 9};
         int pos = scan.nextInt();
-        if (Arrays.asList(valid).contains(pos) && checkEmpty(pos)) {
-            board[pos] = player; //UC-5
-            int win = winCheck(player);
-            if(win == 0) {
-                System.out.println("The game is not yet decided, the computer will not have a turn");
-                currPlayer = 1;
-            }else
-                System.out.println("Player Wins the Game");
-        }else {
-            System.out.println("Invalid Choice, please enter a number between 1-9.");
-            playerTurn();
+        while (!checkEmpty(pos)) {
+            System.out.println("Invalid Entry");
+            pos = scan.nextInt(9) + 1;
         }
-
+        if (Arrays.asList(valid).contains(pos)) {
+            board[pos] = player; //UC-5
+            showBoard();
+            int win = winCheck(player);
+            if (win == 0) {
+                System.out.println("The game is not yet decided, the computer will now have a turn");
+                computerMove();
+            } else {
+                System.out.println("Player Wins the Game");
+                System.exit(0);
+            }
+        }
     }
+
 
     public static boolean checkEmpty(int pos) {
         if(board[pos] == ' ') {
             return true;
         }else {
-            System.out.println("The Position you entered is already filled. Please select the position that is empty.");
-            playerTurn();
+            return false;
         }
-        return false;
     }
+
+    public static void computerMove() {
+        int move = (int) Math.floor((Math.random() * 10) % 9) + 1;
+
+        while (!checkEmpty(move))
+            move = (int) Math.floor((Math.random() * 10) % 9) + 1;
+        board[move] = computer;
+        showBoard();
+        int win = winCheck(computer);
+        if(win == 0) {
+            System.out.println("The game is not yet decided, the player will now have a turn");
+            playerTurn();
+        }else {
+            System.out.println("Computer Wins the Game");
+            System.exit(0);
+        }
+    }
+
 
     public static void toss() {
         int result = (int) Math.floor((Math.random() * 10) % 2);
         if(result == 0) {
             System.out.println("Player goes first");
-            currPlayer = 0;
             playerTurn();
         }else {
             System.out.println("Computer goes first");
-            currPlayer = 1;
+            computerMove();
         }
     }
 
@@ -123,8 +141,8 @@ public class TicTacToe {
     public static void main(String[] args) {
         makeEmpty();
         playerSelect();
-        showBoard();
-        playerTurn();
+        //showBoard();
+        //playerTurn();
         toss();
     }
    }
