@@ -3,11 +3,13 @@ package TicTacToe;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class TicTacToe { 
-// UC-2
+public class TicTacToe {
+
+	 // UC-2
     static char[] board = new char[10];
     public static char player;
     public static char computer;
+    static int currPlayer; // 0 for player and 1 for computer
 
     public static void makeEmpty() {
         for (int i = 1; i < board.length; i++) {
@@ -54,7 +56,12 @@ public class TicTacToe {
         int pos = scan.nextInt();
         if (Arrays.asList(valid).contains(pos) && checkEmpty(pos)) {
             board[pos] = player; //UC-5
-            showBoard();
+            int win = winCheck(player);
+            if(win == 0) {
+                System.out.println("The game is not yet decided, the computer will not have a turn");
+                currPlayer = 1;
+            }else
+                System.out.println("Player Wins the Game");
         }else {
             System.out.println("Invalid Choice, please enter a number between 1-9.");
             playerTurn();
@@ -74,11 +81,44 @@ public class TicTacToe {
 
     public static void toss() {
         int result = (int) Math.floor((Math.random() * 10) % 2);
-        if(result == 0)
+        if(result == 0) {
             System.out.println("Player goes first");
-        else
+            currPlayer = 0;
+            playerTurn();
+        }else {
             System.out.println("Computer goes first");
+            currPlayer = 1;
+        }
     }
+
+    public static int winCheck(char symbol) {
+        // horizontal
+        if (board[1] == symbol && board[2] == symbol && board[3] == symbol)
+            return 1;
+        if (board[4] == symbol && board[5] == symbol && board[6] == symbol)
+            return 2;
+        if (board[7] == symbol && board[8] == symbol && board[9] == symbol)
+            return 3;
+
+        // vertical
+        if (board[1] == symbol && board[4] == symbol && board[7] == symbol)
+            return 4;
+        if (board[2] == symbol && board[5] == symbol && board[8] == symbol)
+            return 5;
+        if (board[3] == symbol && board[6] == symbol && board[9] == symbol)
+            return 6;
+
+        // diagonal
+        if (board[1] == symbol && board[5] == symbol && board[9] == symbol)
+            return 7;
+
+        // off diagonal
+        if (board[3] == symbol && board[5] == symbol && board[7] == symbol)
+            return 8;
+
+        return 0;
+    }
+
 
     public static void main(String[] args) {
         makeEmpty();
@@ -87,4 +127,4 @@ public class TicTacToe {
         playerTurn();
         toss();
     }
-}
+   }
